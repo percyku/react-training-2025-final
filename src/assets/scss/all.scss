@@ -1,13 +1,19 @@
 @import "bootstrap/scss/functions";
-@import "./helpers/variables";
+@import "./utilities/variables";
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
+
+@import "./base/base";
+
+@import "./layout/header";
+@import "./layout/footer";
+
+@import "./pages/index";
+@import "./pages/login-page";
+@import "./pages/cart";
 
 @import "./utilities/card-img-top";
 @import "./utilities/img-cover";
 @import "./utilities/loading";
 @import "./utilities/active-link";
-
-@import "./layout/custom";
-@import "./pages/login-page";
