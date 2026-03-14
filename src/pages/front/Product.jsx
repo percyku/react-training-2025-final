@@ -105,7 +105,7 @@ const Product = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="margin-top cart-bg ">
       <Toaster />
       <Loading isLoading={isLoading} />
       <PicModal modalRef={modalRefPic} photoUrl={photoUrl} />

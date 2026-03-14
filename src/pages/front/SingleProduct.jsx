@@ -11,14 +11,6 @@ import { createAsyncAddCart } from "../../slice/cartSlice";
 const { VITE_APP_API_BASE, VITE_APP_API_PATH } = import.meta.env;
 
 const SingleProduct = () => {
-  // const location = useLocation();
-  // const product = location.state?.productData.product;
-  // if (!product) {
-  //   return <div>沒有可用的產品資料。</div>;
-  // }
-
-  // console.log(location.pathname);
-
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -82,7 +74,7 @@ const SingleProduct = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="margin-top cart-bg ">
       <Toaster />
       <Loading isLoading={isLoading} />
       <PicModal modalRef={modalRefPic} photoUrl={photoUrl} />
