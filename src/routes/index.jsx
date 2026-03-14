@@ -1,8 +1,10 @@
 import FrontendLayout from "../layout/FrontendLayout";
 
 import Home from "../pages/front/Home";
-import Cart from "../pages/front/Cart";
-import Checkout from "../pages/front/Checkout";
+import CartCheckout from "../pages/front/CartCheckout";
+import CartForm from "../pages/front/CartForm";
+import CarSuccess from "../pages/front/CarSuccess";
+
 import Product from "../pages/front/Product";
 import SingleProduct from "../pages/front/SingleProduct";
 import Login from "../pages/Login";
@@ -31,12 +33,16 @@ const routes = [
         element: <SingleProduct />,
       },
       {
-        path: "cart",
-        element: <Cart />,
+        path: "cartcheckout",
+        element: <CartCheckout />,
       },
       {
-        path: "checkout",
-        element: <Checkout />,
+        path: "cartform",
+        element: <CartForm />,
+      },
+      {
+        path: "cartsuccess/:orderId",
+        element: <CarSuccess />,
       },
     ],
   },
