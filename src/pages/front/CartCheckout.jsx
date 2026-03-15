@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { currency } from "../../utils/filter";
-import EmptyCart from "../../components/EmptyCart";
+import CartEmpty from "./CartEmpty";
+
 import {
   createAsyncDeleteAllCart,
   createAsyncDeleteCart,
@@ -137,13 +138,14 @@ const CartCheckout = () => {
 
                         <div className="d-flex flex-nowrap py-7 px-5 justify-content-between align-items-center ">
                           <div className="text-neutral-80">
-                            <a
+                            <button
                               href="#"
+                              className="btn border-0"
                               onClick={(e) => deleteSingleCart(e, cart.id)}
                               disabled={isLoading}
                             >
                               <u>刪除</u>
-                            </a>
+                            </button>
                           </div>
                           <div>
                             <p className="fs-6  text-neutral-200">
@@ -249,7 +251,7 @@ const CartCheckout = () => {
             </div>
           </section>
         ) : (
-          <EmptyCart />
+          <CartEmpty />
         )}
       </div>
     </>
