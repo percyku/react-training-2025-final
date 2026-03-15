@@ -69,43 +69,6 @@
   }
 }
 
-.index-inspire {
-  .deco-img {
-    width: 162px;
-    height: 80px;
-  }
-  .deco-text {
-    font-size: 100px;
-    color: #dfd2cd;
-    z-index: 1000;
-    font-style: italic;
-  }
-  .card {
-    width: 312px;
-    // height: 610px;
-    img {
-      width: 280px;
-      height: 200px;
-    }
-  }
-}
-
-@media (min-width: 992px) {
-  .index-inspire {
-    .deco-text {
-      font-size: 200px;
-    }
-    .card {
-      width: 746px;
-      height: 444px;
-      img {
-        width: 300px;
-        height: auto;
-      }
-    }
-  }
-}
-
 .index-about-row {
   margin-right: calc(-50vw + 50% + 24px);
 }

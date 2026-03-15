@@ -3,10 +3,11 @@ import FrontendLayout from "../layout/FrontendLayout";
 import Home from "../pages/front/Home";
 import CartCheckout from "../pages/front/CartCheckout";
 import CartForm from "../pages/front/CartForm";
-import CarSuccess from "../pages/front/CarSuccess";
+import CartSuccess from "../pages/front/CartSuccess";
 
 import Product from "../pages/front/Product";
 import SingleProduct from "../pages/front/SingleProduct";
+
 import Login from "../pages/Login";
 import ProductedRoute from "../components/ProductedRoute";
 import AdminLayout from "../layout/AdminLayout";
@@ -42,7 +43,7 @@ const routes = [
       },
       {
         path: "cartsuccess/:orderId",
-        element: <CarSuccess />,
+        element: <CartSuccess />,
       },
     ],
   },

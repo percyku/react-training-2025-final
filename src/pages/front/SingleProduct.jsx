@@ -1,21 +1,18 @@
-import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { Toaster, toast } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "bootstrap";
 import Loading from "../../components/Loading";
 import PicModal from "../../components/PicModal";
-import { useDispatch } from "react-redux";
 import { createAsyncAddCart } from "../../slice/cartSlice";
-
-const { VITE_APP_API_BASE, VITE_APP_API_PATH } = import.meta.env;
+import { createAsyncGetProduct } from "../../slice/productSlice";
 
 const SingleProduct = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-
   const dispatch = useDispatch();
+  const isProductLoading = useSelector((state) => state.product.isLoading);
+  const isCartLoading = useSelector((state) => state.cart.isLoading);
+  const product = useSelector((state) => state.product.product);
 
   const modalRefPic = useRef(null);
   const myModalPic = useRef(null);
@@ -24,47 +21,13 @@ const SingleProduct = () => {
   );
 
   useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading(true);
-        const res = await axios.get(
-          `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/product/${id}`,
-        );
-        setProduct(res.data.product);
-      } catch (error) {
-        toast.error(`取得產品資料失敗 ${error}`);
-        setProduct();
-      } finally {
-        setIsLoading(false);
-      }
-    })();
+    dispatch(createAsyncGetProduct(id));
 
     myModalPic.current = new Modal(modalRefPic.current);
   }, [id]);
 
   const handleAddCart = (id, qty = 1) => {
     dispatch(createAsyncAddCart({ id, qty }));
-  };
-
-  const addToCart = async (id, qty = 1) => {
-    try {
-      setIsLoading(true);
-      const data = {
-        product_id: id,
-        qty,
-      };
-      const res = await axios.post(
-        `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/cart`,
-        {
-          data,
-        },
-      );
-      toast.success(`${res.data.data.product.title} ${res.data.message}`);
-    } catch (error) {
-      toast.error(`加入購物車失敗 ${error}`);
-    } finally {
-      setIsLoading(false);
-    }
   };
   const getSinglePic = (url) => {
     setPhotoUrl(url);
@@ -75,8 +38,7 @@ const SingleProduct = () => {
 
   return (
     <div className="margin-top cart-bg ">
-      <Toaster />
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={isProductLoading || isCartLoading} />
       <PicModal modalRef={modalRefPic} photoUrl={photoUrl} />
 
       {product ? (
@@ -114,7 +76,7 @@ const SingleProduct = () => {
 
                     <button
                       className="btn btn-primary d-md-none"
-                      // onClick={() => addToCart(product.id)}
+                      disabled={isCartLoading || isProductLoading}
                       onClick={() => handleAddCart(product.id)}
                     >
                       立即購買
@@ -123,7 +85,7 @@ const SingleProduct = () => {
                   <div className="col-md-6  d-none d-md-flex justify-content-md-end ">
                     <button
                       className="btn btn-primary h-25"
-                      // onClick={() => addToCart(product.id)}
+                      disabled={isCartLoading || isProductLoading}
                       onClick={() => handleAddCart(product.id)}
                     >
                       立即購買
