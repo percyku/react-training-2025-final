@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+import * as bootstrap from "bootstrap";
 import { currency } from "../../utils/filter";
 import CartEmpty from "./CartEmpty";
-
+import SingleProductModal from "./SingleProductModal";
 import {
   createAsyncDeleteAllCart,
   createAsyncDeleteCart,
@@ -19,12 +21,20 @@ const CartCheckout = () => {
   const final_total = useSelector((state) => state.cart.final_total);
   const [origPrice, setOrigPrice] = useState(0);
 
+  const [product, setProduct] = useState({});
+  const productModalRef = useRef(null);
+
   useEffect(() => {
     const total = carts.reduce((acc, cart) => {
       return acc + cart.product.origin_price * cart.qty;
     }, 0);
 
     setOrigPrice(total);
+
+    productModalRef.current = new bootstrap.Modal("#productModal", {
+      keyboard: false,
+      // backdrop: "static",
+    });
   }, [carts]);
 
   const deleteCartAll = () => {
@@ -40,9 +50,21 @@ const CartCheckout = () => {
     dispatch(createAsyncDeleteCart(id));
   };
 
+  const openModal = async (e, product) => {
+    e.preventDefault();
+    productModalRef.current.show();
+    setProduct((prev) => {
+      return { ...prev, ...product };
+    });
+  };
+  const closeModal = () => {
+    productModalRef.current.hide();
+  };
+
   return (
     <>
       <div className="margin-top cart-bg ">
+        <SingleProductModal product={product} closeModal={closeModal} />
         {carts?.length > 0 ? (
           <section className="cart-list">
             <div className="container">
@@ -84,13 +106,15 @@ const CartCheckout = () => {
                             />
                           </div>
                           <div className="me-lg-7  w-100">
-                            <h3 className="fs-4 fw-bold text-neutral-100 mb-2 text-center text-lg-start">
+                            <h3 className="fs-4 fw-bold text-neutral-100 mb-2 text-center text-start">
                               {cart.product.title}
                             </h3>
-                            <p className="fs-5 text-neutral-80 mb-2 text-center text-lg-start">
+                            <p className="fs-5 text-neutral-80 mb-2 text-start line-clamp-2">
+                              <span className="fw-bold">商品描述：</span>
                               {cart.product.description}
                             </p>
-                            <p className="fs-5 text-neutral-80 mb-7 text-center text-lg-start">
+                            <p className="fs-5 text-neutral-80 mb-7  text-start line-clamp-2">
+                              <span className="fw-bold">商品內容：</span>
                               {cart.product.content}
                             </p>
                           </div>
@@ -138,6 +162,14 @@ const CartCheckout = () => {
 
                         <div className="d-flex flex-nowrap py-7 px-5 justify-content-between align-items-center ">
                           <div className="text-neutral-80">
+                            <button
+                              href="#"
+                              className="btn border-0"
+                              onClick={(e) => openModal(e, cart.product)}
+                              disabled={isLoading}
+                            >
+                              <u>內容</u>
+                            </button>
                             <button
                               href="#"
                               className="btn border-0"
