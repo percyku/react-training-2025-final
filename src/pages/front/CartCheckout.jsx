@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
 import * as bootstrap from "bootstrap";
 import { currency } from "../../utils/filter";
 import CartEmpty from "./CartEmpty";
