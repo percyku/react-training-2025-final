@@ -1,5 +1,5 @@
 import FrontendLayout from "../layout/FrontendLayout";
-
+import ScrollToTop from "../components/ScrollToTop";
 import Home from "../pages/front/Home";
 import CartCheckout from "../pages/front/CartCheckout";
 import CartForm from "../pages/front/CartForm";
@@ -19,7 +19,11 @@ import NotFound from "../pages/NotFound";
 const routes = [
   {
     path: "/",
-    element: <FrontendLayout />,
+    element: (
+      <ScrollToTop>
+        <FrontendLayout />
+      </ScrollToTop>
+    ),
     children: [
       {
         index: true,
