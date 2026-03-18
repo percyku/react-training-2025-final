@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createAsyncAddCart } from "../../slice/cartSlice";
 import {
+  updateTempInfo,
   createAsyncGetAllProducts,
   createAsyncGetProducts,
 } from "../../slice/productSlice";
@@ -20,16 +21,40 @@ const Product = () => {
   const products = useSelector((state) => state.product.products);
   const pagination = useSelector((state) => state.product.pagination);
   const categories = useSelector((state) => state.product.categories);
-  const [currentCategory, setCurrentCategory] = useState("all");
 
+  const tempCategory = useSelector((state) => state.product.tempCategory);
+  const tempPage = useSelector((state) => state.product.tempPage);
+
+  const [currentCategory, setCurrentCategory] = useState(
+    tempCategory !== "all" ? tempCategory : "all",
+  );
+  const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
+    // window.scrollTo(0, 0);
     dispatch(createAsyncGetAllProducts());
-    dispatch(
-      createAsyncGetProducts({
-        page: 1,
-        category: currentCategory,
-      }),
-    );
+
+    if (tempCategory !== "all" && tempPage !== 0) {
+      dispatch(
+        createAsyncGetProducts({
+          page: tempPage,
+          category: tempCategory,
+        }),
+      );
+
+      dispatch(
+        updateTempInfo({
+          tempCategory: "all",
+          tempPage: 0,
+        }),
+      );
+    } else {
+      dispatch(
+        createAsyncGetProducts({
+          page: 1,
+          category: currentCategory,
+        }),
+      );
+    }
   }, [currentCategory]);
 
   const handleAddCart = (id, qty = 1) => {
@@ -38,7 +63,7 @@ const Product = () => {
 
   const changePage = useCallback((e, page) => {
     e.preventDefault();
-
+    setCurrentPage(page);
     dispatch(
       createAsyncGetProducts({
         page: page,
@@ -48,6 +73,9 @@ const Product = () => {
   }, []);
 
   const getMoreInfo = async (id) => {
+    dispatch(
+      updateTempInfo({ tempCategory: currentCategory, tempPage: currentPage }),
+    );
     navigate(`/product/${id}`);
   };
 
@@ -240,20 +268,16 @@ const Product = () => {
 
                             <p className="text-start mb-7 line-clamp-2">
                               {product.description}
-                              {product.description}
-                              {product.description}
                             </p>
 
-                            <div className="mb-2 d-lg-flex  justify-content-center  align-items-lg-center justify-content-lg-start mb-7">
+                            <div className="mb-2 d-flex  justify-content-start  align-items-lg-center  mb-7">
                               <button
                                 type="button"
-                                className="btn btn-primary-10 rounded rounded-3 py-2 px-5 flex-shrink-0 me-4 "
+                                className="btn btn-primary-10 rounded rounded-3 py-2 px-5 flex-shrink-0 me-4 h-25"
                               >
                                 建議
                               </button>
                               <p className="text-start line-clamp-2">
-                                {product.content}
-                                {product.content}
                                 {product.content}
                               </p>
                             </div>
