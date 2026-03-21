@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { createAsyncGetCart } from "../slice/cartSlice";
-
-import logo from "../assets/images/logo.png";
+import { createAsyncGetArticles } from "../slice/articleSlice";
 
 const Header = () => {
   const carts = useSelector((state) => state.cart.carts);
@@ -12,6 +11,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(createAsyncGetCart());
+    dispatch(createAsyncGetArticles());
   }, [dispatch]);
 
   const handleActvie = ({ isActive }) => {
@@ -21,9 +21,9 @@ const Header = () => {
     <>
       <nav className="navbar navbar-animate py-4 py-lg-5 fixed-top">
         <div className="container ">
-          <div className="d-flex align-items-center ">
+          <div className="d-flex  ">
             <NavLink className="navbar-brand p-0 me-7" to="/">
-              <img src={logo} className="logo-size" alt="logo" />
+              <p className="fw-bold  fs-2">#FreeTrav</p>
             </NavLink>
           </div>
 

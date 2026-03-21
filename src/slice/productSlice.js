@@ -65,6 +65,9 @@ export const productSlice = createSlice({
       };
       state.isLoading = false;
     },
+    updateSearchProducts(state, action) {
+      state.products = action.payload || [];
+    },
     updateCategories(state, action) {
       state.categories = action.payload || [];
     },
@@ -91,6 +94,36 @@ export const createAsyncGetAllProducts = createAsyncThunk(
         ...new Set(res.data.products.map((item) => item.category)),
       ];
       dispatch(updateCategories(result));
+    } catch (error) {
+      dispatch(
+        createAsyncMessage({
+          message: error.response?.data?.message || "取得商品失敗",
+          success: false,
+        }),
+      );
+      throw error;
+    } finally {
+      dispatch(updateLoading(false));
+    }
+  },
+);
+
+export const createAsyncGetSearchProducts = createAsyncThunk(
+  "product/createAsyncGetSearchProducts",
+  async (search, { dispatch }) => {
+    try {
+      dispatch(updateLoading(true));
+      dispatch(updateSearchProducts());
+      const res = await axios.get(
+        `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/products`,
+      );
+
+      const result = res.data.products.filter(
+        (product) =>
+          product.title.includes(search) || product.category.includes(search),
+      );
+
+      dispatch(updateSearchProducts(result));
     } catch (error) {
       dispatch(
         createAsyncMessage({
@@ -161,6 +194,7 @@ export const createAsyncGetProduct = createAsyncThunk(
 export const {
   updateProduct,
   updateProducts,
+  updateSearchProducts,
   updateCategories,
   updateLoading,
   updateTempInfo,

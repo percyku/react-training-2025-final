@@ -7,6 +7,8 @@ import CartSuccess from "../pages/front/CartSuccess";
 
 import Product from "../pages/front/Product";
 import SingleProduct from "../pages/front/SingleProduct";
+import SearchProduct from "../pages/front/SearchProduct";
+import SingleArticle from "../pages/front/SingleArticle";
 
 import Login from "../pages/Login";
 import ProductedRoute from "../components/ProductedRoute";
@@ -36,6 +38,14 @@ const routes = [
       {
         path: "product/:id",
         element: <SingleProduct />,
+      },
+      {
+        path: "searchproduct/:search",
+        element: <SearchProduct />,
+      },
+      {
+        path: "article/:id",
+        element: <SingleArticle />,
       },
       {
         path: "cartcheckout",

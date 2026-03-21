@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "bootstrap";
-import Loading from "../../components/Loading";
 import PicModal from "../../components/PicModal";
 import { createAsyncAddCart } from "../../slice/cartSlice";
 import { createAsyncGetProduct } from "../../slice/productSlice";

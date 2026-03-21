@@ -1,77 +1,51 @@
-import { useEffect, useState, useCallback } from "react";
+import { useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createAsyncAddCart } from "../../slice/cartSlice";
 import {
+  createAsyncGetSearchProducts,
   updateTempInfo,
-  createAsyncGetAllProducts,
-  createAsyncGetProducts,
 } from "../../slice/productSlice";
-import Pagination from "../../components/Pagination";
-
-const Product = () => {
+import { useEffect } from "react";
+const SearchProduct = () => {
+  const { search } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const isCartLoading = useSelector((state) => state.cart.isLoading);
   const isProductLoading = useSelector((state) => state.product.isLoading);
   const products = useSelector((state) => state.product.products);
-  const pagination = useSelector((state) => state.product.pagination);
-  const categories = useSelector((state) => state.product.categories);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    // reset,
+  } = useForm({
+    mode: "onClick",
+    defaultValues: {
+      search: search,
+    },
+  });
 
-  const tempCategory = useSelector((state) => state.product.tempCategory);
-  const tempPage = useSelector((state) => state.product.tempPage);
-
-  const [currentCategory, setCurrentCategory] = useState(
-    tempCategory !== "all" ? tempCategory : "all",
-  );
-  const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
-    dispatch(createAsyncGetAllProducts());
+    dispatch(createAsyncGetSearchProducts(search));
+  }, [search]);
 
-    if (tempCategory !== "all" && tempPage !== 0) {
-      dispatch(
-        createAsyncGetProducts({
-          page: tempPage,
-          category: tempCategory,
-        }),
-      );
-
-      dispatch(
-        updateTempInfo({
-          tempCategory: "all",
-          tempPage: 0,
-        }),
-      );
-    } else {
-      dispatch(
-        createAsyncGetProducts({
-          page: 1,
-          category: currentCategory,
-        }),
-      );
-    }
-  }, [currentCategory]);
+  const onSubmit = async (data) => {
+    const { search } = data;
+    dispatch(createAsyncGetSearchProducts(search));
+    // navigate(`/searchproduct/${search}`);
+  };
+  const goBack = () => {
+    navigate(`/product`);
+  };
 
   const handleAddCart = (id, qty = 1) => {
     dispatch(createAsyncAddCart({ id, qty }));
   };
 
-  const changePage = useCallback((e, page) => {
-    e.preventDefault();
-    setCurrentPage(page);
-    dispatch(
-      createAsyncGetProducts({
-        page: page,
-        category: currentCategory,
-      }),
-    );
-  }, []);
-
   const getMoreInfo = async (id) => {
-    dispatch(
-      updateTempInfo({ tempCategory: currentCategory, tempPage: currentPage }),
-    );
+    dispatch(updateTempInfo({ tempCategory: "", tempPage: "" }));
     navigate(`/product/${id}`);
   };
 
@@ -79,41 +53,63 @@ const Product = () => {
     <>
       <div className="margin-top travel-bg ">
         <section className="index-inspire ">
-          <div className="container py-10 py-lg-11">
-            <div className="row justify-content-between align-items-center">
-              <div className="col-12 col-lg-5">
-                <h3 className="text-primary mb-7 text-start">
-                  今年旅行的 <br />
-                  靈感地圖
-                </h3>
-
-                <div className="d-flex overflow-x-auto mb-7">
-                  {categories.map((category) => {
-                    return (
-                      <button
-                        key={category}
-                        type="button"
-                        className={`rounded rounded-3 py-2 px-5  me-2 flex-shrink-0 ${category === currentCategory ? "btn btn-primary" : "btn btn-light"}`}
-                        // className="btn btn-primary rounded rounded-3 py-2 px-5 flex-shrink-0"
-                        disabled={isCartLoading || isProductLoading}
-                        onClick={() => {
-                          setCurrentCategory(category);
-                        }}
-                      >
-                        {category === "all" ? "全部" : category}
-                      </button>
-                    );
-                  })}
-                </div>
+          <div className="container py-10 ">
+            <div className="row">
+              <div className="d-flex py-2 mb-5">
+                <button
+                  className="btn btn-outline-primary rounded-3 "
+                  type="button"
+                  onClick={goBack}
+                  // disabled={isProductLoading || isCartLoading}
+                >
+                  全部行程
+                </button>
               </div>
+              <div className="col-lg-5 col-md-7">
+                <form
+                  className="position-relative"
+                  onSubmit={handleSubmit(onSubmit)}
+                >
+                  <div>
+                    <span className="material-icons-outlined align-bottom position-relative position-absolute top-50 start-0 translate-middle-y ps-4 text-neutral-60">
+                      search
+                    </span>
+                    <input
+                      name="search"
+                      type="search"
+                      className="form-control rounded-3 py-4 ps-10"
+                      id="navbar-lg-search"
+                      placeholder="搜尋景點、地點或城市"
+                      defaultValue={search}
+                      {...register("search", {
+                        required: "請輸入景點、地點或城市。",
+                        minLength: {
+                          value: 1,
+                          message: "不能空白",
+                        },
+                      })}
+                    />
 
-              <div className="col-12 col-lg-5 d-flex justify-content-lg-end">
-                <div>
-                  <p className="text-primary">
-                    來自旅人搜尋、收藏與討論最多的目的地排行榜， <br />
-                    一場風格與故事感兼具的靈感旅行，就從這裡開始。
+                    <button
+                      className="btn btn-primary position-absolute flex-shrink-0 top-50 start-65  d-lg-none translate-middle-y "
+                      disabled={isCartLoading || isProductLoading}
+                    >
+                      開始探索旅程
+                    </button>
+
+                    <button
+                      className="btn btn-primary position-absolute flex-shrink-0 top-50 start-70  d-none d-lg-block translate-middle-y "
+                      disabled={isCartLoading || isProductLoading}
+                    >
+                      開始探索旅程
+                    </button>
+                  </div>
+                </form>
+                {errors.search && (
+                  <p className="text-alert mt-3 text-start">
+                    {errors.search.message}
                   </p>
-                </div>
+                )}
               </div>
             </div>
 
@@ -201,16 +197,9 @@ const Product = () => {
             </div>
           </div>
         </section>
-        <div className="d-flex justify-content-center">
-          <Pagination
-            pagination={pagination}
-            changePage={changePage}
-            loadingProductId={null}
-          />
-        </div>
       </div>
     </>
   );
 };
 
-export default Product;
+export default SearchProduct;
