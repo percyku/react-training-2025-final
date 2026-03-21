@@ -3,19 +3,18 @@ import axios from "axios";
 import { RotatingTriangles } from "react-loader-spinner";
 import { useNavigate } from "react-router";
 
-const { VITE_APP_API_BASE } = import.meta.env;
+const { VITE_APP_API_BASE, VITE_APP_TOKEN_NAME } = import.meta.env;
 
 const ProductedRoute = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
-      const tokenName = "react-week2-token=";
       try {
         setIsLoading(true);
         const token = document.cookie
           .split("; ")
-          .find((row) => row.startsWith("react-week2-token="))
+          .find((row) => row.startsWith(`${VITE_APP_TOKEN_NAME}=`))
           ?.split("=")[1];
         axios.defaults.headers.common.Authorization = token;
         if (token !== undefined) {
@@ -29,9 +28,9 @@ const ProductedRoute = ({ children }) => {
           navigate(`/login`);
         }
       } catch (error) {
-        // document.cookie = `${tokenName}; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        // document.cookie = `${tokenName}; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${VITE_APP_API_COOKIE_PATH}`;
         // 或者使用 max-age 属性
-        document.cookie = `${tokenName}; max-age=0; path=/`;
+        document.cookie = `${VITE_APP_TOKEN_NAME}=; max-age=0; path=${VITE_APP_API_COOKIE_PATH}`;
 
         navigate(`/login`);
       } finally {

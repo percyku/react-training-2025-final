@@ -35,7 +35,7 @@ const AdminArticle = () => {
     image:
       "https://images.unsplash.com/photo-1515865644861-8bedc4fb8344?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D",
     isPublic: false,
-    tag: ["亞洲", "歐洲"],
+    tag: [],
     title: "title1234",
     num: 1,
     content: "default",
@@ -49,7 +49,6 @@ const AdminArticle = () => {
         const res = await axios.get(
           `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/admin/articles`,
         );
-
         setArticles(res.data.articles);
         setPagiantion(res.data.pagination);
       } catch (error) {
@@ -136,13 +135,14 @@ const AdminArticle = () => {
   };
 
   const handleTag = (e) => {
-    const { checked, value } = e.target;
+    const { name, checked } = e.target;
     setTemplateData((prevData) => {
       let newTags = [...prevData.tag];
+
       if (checked) {
-        newTags.push(value);
+        newTags.push(name);
       } else {
-        newTags = newTags.filter((item) => item !== value);
+        newTags = newTags.filter((item) => item !== name);
       }
       return { ...prevData, tag: newTags };
     });

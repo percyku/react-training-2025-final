@@ -96,14 +96,12 @@ const AdminProductModal = ({
                     value={templateData.imageUrl}
                     onChange={handleModalInputChange}
                   />
-
                   <img
                     className="img-fluid"
-                    src={templateData.imageUrl}
+                    src={templateData.imageUrl || ""}
                     alt="主圖"
                     onClick={() => getSinglePic(templateData.imageUrl)}
                   />
-
                   <div>
                     {templateData.imagesUrl.map((image, index) => (
                       <div key={index} className="mb-2">

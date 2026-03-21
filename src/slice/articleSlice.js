@@ -11,9 +11,7 @@ export const articleSlice = createSlice({
   //actions
   reducers: {
     updateArticle(state, action) {
-      console.log("1", action.payload);
       state.article = action.payload || {};
-      console.log("2", state.article);
     },
 
     updateArticles(state, action) {

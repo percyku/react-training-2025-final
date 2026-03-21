@@ -1,10 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
+const { VITE_APP_API_COOKIE_PATH, VITE_APP_TOKEN_NAME } = import.meta.env;
 const NavAdmin = () => {
   const navigate = useNavigate();
   const logout = () => {
-    console.log("logout");
-    const tokenName = "react-week2-token=";
-    document.cookie = `${tokenName}; max-age=0; path=/`;
+    document.cookie = `${VITE_APP_TOKEN_NAME}=; max-age=0; path=${VITE_APP_API_COOKIE_PATH}`;
     navigate(`/login`);
   };
 

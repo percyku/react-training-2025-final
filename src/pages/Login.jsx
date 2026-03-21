@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Loading from "../components/Loading";
-const { VITE_APP_API_BASE } = import.meta.env;
+const { VITE_APP_API_BASE, VITE_APP_TOKEN_NAME } = import.meta.env;
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,10 +21,10 @@ const Login = () => {
 
   useEffect(() => {
     (async () => {
-      const tokenName = "react-week2-token=";
+      const tokenName = `${VITE_APP_TOKEN_NAME}=`;
       const token = document.cookie
         .split("; ")
-        .find((row) => row.startsWith("react-week2-token="))
+        .find((row) => row.startsWith(`${VITE_APP_TOKEN_NAME}=`))
         ?.split("=")[1];
 
       try {
@@ -40,9 +40,9 @@ const Login = () => {
           }
         }
       } catch (error) {
-        // document.cookie = `${tokenName}; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        // document.cookie = `${tokenName}; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${VITE_APP_API_COOKIE_PATH}`;
         // 或者使用 max-age 属性
-        document.cookie = `${tokenName}; max-age=0; path=/`;
+        document.cookie = `${VITE_APP_TOKEN_NAME}=; max-age=0; path=${VITE_APP_API_COOKIE_PATH}`;
       } finally {
         setIsLoading(false);
       }
@@ -58,7 +58,7 @@ const Login = () => {
       );
       const { token, expired } = res.data;
       setAuthData({ token, expired });
-      document.cookie = `react-week2-token=${token};expires=${new Date(
+      document.cookie = `${VITE_APP_TOKEN_NAME}=${token};expires=${new Date(
         expired,
       )};`;
     } catch (error) {

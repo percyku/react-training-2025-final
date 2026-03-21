@@ -151,7 +151,10 @@ const AdminArticleModal = ({
                   </div>
 
                   <div className="mb-5">
-                    {tags.map((tag, i) => {
+                    {tags?.map((tag, i) => {
+                      let isChecked = templateData.tag?.find((item) =>
+                        item === tag ? true : false,
+                      );
                       return (
                         <div
                           className="form-check form-check-inline"
@@ -160,17 +163,12 @@ const AdminArticleModal = ({
                           <input
                             className="form-check-input"
                             type="checkbox"
-                            id={tag + "_" + i}
-                            value={tag}
-                            checked={templateData.tag?.find((item) =>
-                              item === tag ? true : false,
-                            )}
+                            id={tag}
+                            name={tag}
+                            checked={isChecked || false}
                             onChange={handleTag}
                           />
-                          <label
-                            className="form-check-label"
-                            for={tag + "_" + i}
-                          >
+                          <label className="form-check-label" htmlFor={tag}>
                             {tag}
                           </label>
                         </div>

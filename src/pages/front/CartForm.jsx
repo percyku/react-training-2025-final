@@ -36,10 +36,15 @@ const CartForm = () => {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      name: "percy",
-      email: "test123@gmail.com",
-      tel: "123456789",
-      address: "123",
+      name: "",
+      email: "",
+      tel: "",
+      address: "",
+      //for test
+      // name: "percy",
+      // email: "test123@gmail.com",
+      // tel: "123456789",
+      // address: "123",
     },
   });
 

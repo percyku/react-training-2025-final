@@ -60,9 +60,12 @@ const SingleArticle = () => {
                       {article.title}
                     </h5>
                     {article.tag &&
-                      article.tag.map((item) => {
+                      article.tag.map((item, i) => {
                         return (
-                          <span className="badge bg-primary ms-3 h-50">
+                          <span
+                            className="badge bg-primary ms-3 h-50"
+                            key={item + "_" + i}
+                          >
                             {item}
                           </span>
                         );
