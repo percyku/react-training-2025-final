@@ -115,9 +115,8 @@ export const createAsyncGetSearchProducts = createAsyncThunk(
       dispatch(updateLoading(true));
       dispatch(updateSearchProducts());
       const res = await axios.get(
-        `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/products`,
+        `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/products/all`,
       );
-
       const result = res.data.products.filter(
         (product) =>
           product.title.includes(search) || product.category.includes(search),
@@ -142,6 +141,9 @@ export const createAsyncGetProducts = createAsyncThunk(
   "product/createAsyncGetProducts",
   async ({ page, category }, { dispatch }) => {
     try {
+      console.log("page", page);
+      console.log("category", category);
+
       dispatch(updateLoading(true));
       const res = await axios.get(
         `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/products`,
@@ -152,6 +154,7 @@ export const createAsyncGetProducts = createAsyncThunk(
           },
         },
       );
+      console.log(res.data);
       dispatch(updateProducts(res.data));
     } catch (error) {
       dispatch(

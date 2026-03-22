@@ -110,11 +110,11 @@ const CartCheckout = () => {
                             </h3>
                             <p className="fs-5 text-neutral-80 mb-2 text-start line-clamp-2">
                               <span className="fw-bold">商品描述：</span>
-                              {cart.product.description}
+                              {cart.product.content}
                             </p>
                             <p className="fs-5 text-neutral-80 mb-7  text-start line-clamp-2">
                               <span className="fw-bold">商品內容：</span>
-                              {cart.product.content}
+                              {cart.product.description}
                             </p>
                           </div>
 

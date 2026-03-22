@@ -35,7 +35,7 @@ const SingleProductModal = memo(({ product, closeModal }) => {
                   </div>
                   <div className="text-start">
                     <div className="mb-7">
-                      <p className="card-text fs-4 fw-bold">商品描述：</p>
+                      <p className="card-text fs-4 fw-bold">商品描述(建議)：</p>
                       <p className="card-text">{product.description}</p>
                     </div>
                     <div className="mb-7">

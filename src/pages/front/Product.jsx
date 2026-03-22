@@ -25,11 +25,10 @@ const Product = () => {
   const [currentCategory, setCurrentCategory] = useState(
     tempCategory !== "all" ? tempCategory : "all",
   );
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(tempPage !== 0 ? tempPage : 1);
   useEffect(() => {
     dispatch(createAsyncGetAllProducts());
-
-    if (tempCategory !== "all" && tempPage !== 0) {
+    if (tempPage !== 0) {
       dispatch(
         createAsyncGetProducts({
           page: tempPage,
@@ -57,20 +56,28 @@ const Product = () => {
     dispatch(createAsyncAddCart({ id, qty }));
   };
 
-  const changePage = useCallback((e, page) => {
-    e.preventDefault();
-    setCurrentPage(page);
-    dispatch(
-      createAsyncGetProducts({
-        page: page,
-        category: currentCategory,
-      }),
-    );
-  }, []);
+  const changePage = useCallback(
+    (e, page) => {
+      e.preventDefault();
+      setCurrentPage(page);
+
+      dispatch(
+        createAsyncGetProducts({
+          page: page,
+          category: currentCategory,
+        }),
+      );
+      window.scrollTo(0, 0);
+    },
+    [currentCategory],
+  );
 
   const getMoreInfo = async (id) => {
     dispatch(
-      updateTempInfo({ tempCategory: currentCategory, tempPage: currentPage }),
+      updateTempInfo({
+        tempCategory: currentCategory,
+        tempPage: currentPage,
+      }),
     );
     navigate(`/product/${id}`);
   };
@@ -166,7 +173,7 @@ const Product = () => {
                             <h2 className="text-start"> {product.title}</h2>
 
                             <p className="text-start mb-7 line-clamp-2">
-                              {product.description}
+                              {product.content}
                             </p>
 
                             <div className="mb-2 d-flex  justify-content-start  align-items-lg-center  mb-7">
@@ -177,7 +184,7 @@ const Product = () => {
                                 建議
                               </button>
                               <p className="text-start line-clamp-2">
-                                {product.content}
+                                {product.description}
                               </p>
                             </div>
                             <button
