@@ -141,9 +141,6 @@ export const createAsyncGetProducts = createAsyncThunk(
   "product/createAsyncGetProducts",
   async ({ page, category }, { dispatch }) => {
     try {
-      console.log("page", page);
-      console.log("category", category);
-
       dispatch(updateLoading(true));
       const res = await axios.get(
         `${VITE_APP_API_BASE}/api/${VITE_APP_API_PATH}/products`,
@@ -154,7 +151,6 @@ export const createAsyncGetProducts = createAsyncThunk(
           },
         },
       );
-      console.log(res.data);
       dispatch(updateProducts(res.data));
     } catch (error) {
       dispatch(
